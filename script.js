@@ -13,6 +13,7 @@ const configuration = {
     urls: 'stun:stun.l.google.com:19302'
   }]
 };
+
 let room;
 let pc;
 
@@ -70,46 +71,47 @@ function startWebRTC(isOfferer) {
     }
     
   }
-};
     
- startListeningToSignals();
-    
-  // When a remote stream arrives display it in the #remoteVideo element
-  pc.ontrack = event => {
-     const stream = event.streams[0];
-    if (!remoteVideo.srcObject || remoteVideo.srcObject.id !== stream.id) {
-      remoteVideo.srcObject = stream;
-    }
-  };
-    
-  navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: {facingMode : "environment"},
-  }).then(stream => {
-    // Display your local video in #localVideo element
-    localVideo.srcObject = stream;
-    // Add your stream to be sent to the conneting peer
-    stream.getTracks().forEach(track => pc.addTrack(track, stream));
-  }, onError);
-    
-function startListeningToSignals(){
-    room.on('data',(message,client)=>{
-        if(client.id === drone.clientId){
-            return;
+    // When a remote stream arrives display it in the #remoteVideo element
+    pc.ontrack = event => {
+        const stream = event.streams[0];
+        if (!remoteVideo.srcObject || remoteVideo.srcObject.id !== stream.id) {
+            remoteVideo.srcObject = stream;
         }
-        if(message.sdp){
-            pc.setRemoteDescription(new RTCSessionDescription(message.sdp),()=>{
-                console.log('pc.remoteDescription.type',pc.remoteDescription.type);
-                
-                if(pc.remoteDescription.type === 'offer'){
-                    console.log('Answering offer');
-                    pc.createAnswer(localDescCreated,onError);
-                }
-            },onError);
-        }else if(message.candidate){
-            pc.addIceCandidate(new RTCIceCandidate(message.candidate));
+    };
+
+    navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: {facingMode : "environment"},
+        }).then(stream => { 
+        // Display your local video in #localVideo element
+        localVideo.srcObject = stream;
+        // Add your stream to be sent to the conneting peer
+        stream.getTracks().forEach(track => pc.addTrack(track, stream));
+        }, onError);
+    
+  // Listen to signaling data from Scaledrone
+    room.on('data', (message, client) => {
+        // Message was sent by us
+        if (client.id === drone.clientId) {
+          return;
         }
-    });
+
+        if (message.sdp) {
+          // This is called after receiving an offer or answer from another peer
+          pc.setRemoteDescription(new RTCSessionDescription(message.sdp), () => {
+            // When receiving an offer lets answer it
+            if (pc.remoteDescription.type === 'offer') {
+              pc.createAnswer().then(localDescCreated).catch(onError);
+            }
+          }, onError);
+        } else if (message.candidate) {
+          // Add the new ICE candidate to our connections remote description
+          pc.addIceCandidate(
+            new RTCIceCandidate(message.candidate), onSuccess, onError
+          );
+        }
+      });
 }
 
 function localDescCreated(desc) {
