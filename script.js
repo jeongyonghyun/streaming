@@ -3,14 +3,14 @@ if (!location.hash) {
   location.hash = Math.floor(Math.random() * 0xFFFFFF).toString(16);
 }
 const roomHash = location.hash.substring(1);
-const target = document.getElementById("url");
-const roomUrl = "https://jeongyonghyun.github.io/#" + roomHash;
-const newUrl = encodeURIComponent(roomUrl);
-target.innerHTML = roomUrl;
-console.log(roomUrl);
+//const target = document.getElementById("url");
+///const roomUrl = "https://jeongyonghyun.github.io/#" + roomHash;
+//const newUrl = encodeURIComponent(roomUrl);
+//target.innerHTML = roomUrl;
+//console.log(roomUrl);
 
-googleQRUrl = "https://chart.googleapis.com/chart?chs=177x177&cht=qr&chl=";
-$('#qrCode').attr('src', googleQRUrl + newUrl,'&choe=UTF-8');
+//googleQRUrl = "https://chart.googleapis.com/chart?chs=177x177&cht=qr&chl=";
+//$('#qrCode').attr('src', googleQRUrl + newUrl,'&choe=UTF-8');
 
 // TODO: Replace with your own channel ID
 const drone = new ScaleDrone('63wnzap0klxFE9at');
@@ -120,21 +120,6 @@ function startWebRTC(isOfferer) {
             
             document.getElementById("lat").value = lat;
             document.getElementById("long").value = long;
-            /*
-            const gps = document.querySelector('#map');
-            let map;
-    
-            map = new google.maps.Map(gps,{
-                center : centerLocation,
-                zoom : 16
-            });
-            
-            var marker = new google.maps.Marker({
-                position : centerLocation,
-                animation : google.maps.Animation.BOUNCE
-            });
-            
-             marker.setMap(map);*/
             
             dataChannel.send(JSON.stringify(centerLocation));  
         }
@@ -172,14 +157,14 @@ let mediaRecorder;
 let recordedBlobs;
 let sourceBuffer;
 const locVideo = document.querySelector('video#localVideo');
-const recordedVideo = document.querySelector('video#recordVideo');
-const recordButton = document.querySelector('button#record');
-const playButton = document.querySelector('button#play');
-const downloadButton = document.querySelector('button#download'); 
+//const recordedVideo = document.querySelector('video#recordVideo');
+//const recordButton = document.querySelector('button#record');
+//const playButton = document.querySelector('button#play');
+//const downloadButton = document.querySelector('button#download'); 
     
-recordButton.onclick = toggleRecording;
-playButton.onclick = play;
-downloadButton.onclick = download;
+//recordButton.onclick = toggleRecording;
+//playButton.onclick = play;
+//downloadButton.onclick = download;
     
 var stream = locVideo.captureStream();
 console.log("start stream capture from local video : ", stream);
@@ -214,7 +199,7 @@ function toggleRecording() {
     downloadButton.disabled = false;
   }
 }    
-    
+/*    
 function startRecording() {
   let options = {mimeType: 'video/webm;codecs=vp9'};
   recordedBlobs = [];
@@ -249,7 +234,7 @@ function startRecording() {
   mediaRecorder.ondataavailable = handleDataAvailable;
   mediaRecorder.start(100); // collect 100ms of data
   console.log('MediaRecorder started', mediaRecorder);
-}   
+}*/
 
 function stopRecording() {
   mediaRecorder.stop();
@@ -260,7 +245,7 @@ function stopRecording() {
 function play() {
   recordedVideo.play();
 }
-    
+/*    
 function download() {
   const blob = new Blob(recordedBlobs, {type: 'video/webm'});
   const url = window.URL.createObjectURL(blob);
@@ -277,7 +262,7 @@ function download() {
   }, 100);
 }
     
-}
+}*/
 function startListeningToSignals(){
     room.on('data',(message,client)=>{
         if(client.id === drone.clientId){
@@ -305,7 +290,7 @@ function localDescCreated(desc) {
     onError
   );
 }
-
+/*
 function setupDataChannel(){
     checkDataChannelState();
     dataChannel.onopen = checkDataChannelState;
@@ -335,7 +320,7 @@ function setupDataChannel(){
             
              marker.setMap(map);
     }
-}
+}*/
 
 function checkDataChannelState(){
     console.log('WenbRTC channel state is : ',dataChannel.readyState);
