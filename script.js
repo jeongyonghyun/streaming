@@ -328,4 +328,3 @@ function checkDataChannelState(){
        console.log('WebRTC is open now');
     }
 }
-
