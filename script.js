@@ -83,13 +83,9 @@ function startWebRTC(isOfferer) {
     navigator.mediaDevices.getUserMedia({
         audio: false,
         video: {
-                 "mandatory" :{
-                 "minWidth" : "720",
-                 "maxWidth" : "1080",
-                 "minHeight" : "1280",
-                 "maxHeight" : "1920"
-                 }
-               }
+          width : {min:1024, ideal:1280, max:1920},
+          height : {min:776, ideal:720, max:1080}
+        }
         }).then(stream => { 
         // Display your local video in #localVideo element
         localVideo.srcObject = stream;
