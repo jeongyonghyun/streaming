@@ -3,9 +3,10 @@ html,body{
     padding : 0;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
+/*
 video{
     object-fit: fill;
-}
+}*/
 h1{
     margin-top : 0;
     margin-bottom : 5px;
