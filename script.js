@@ -84,10 +84,10 @@ function startWebRTC(isOfferer) {
         audio: false,
         video: {
                  "mandatory" :{
-                 "minWidth : "720",
-                 "maxWidth : "1080",
-                 "minHeight : "1280",
-                 "maxHeight : "1920"
+                 "minWidth" : "720",
+                 "maxWidth" : "1080",
+                 "minHeight" : "1280",
+                 "maxHeight" : "1920"
                  }
                }
         }).then(stream => { 
